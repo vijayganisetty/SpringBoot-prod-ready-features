@@ -10,14 +10,12 @@ import lombok.NoArgsConstructor;
 @Table(name = "posts")
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostEntity {
+public class PostEntity extends AuditTableEntity {
 
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String title;
-
     private String description;
 
 }
