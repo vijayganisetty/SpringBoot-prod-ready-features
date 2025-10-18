@@ -29,4 +29,10 @@ public class PostController {
     public PostDTO getPostById(@PathVariable Long id){
         return postService.getPostById(id);
     }
+
+    @PutMapping("/{id}")
+    public PostDTO UpdatePostByID(@RequestBody PostDTO postDTO, @PathVariable Long id){
+        return postService.UpdatePostByID(postDTO, id);
+    }
+
 }
