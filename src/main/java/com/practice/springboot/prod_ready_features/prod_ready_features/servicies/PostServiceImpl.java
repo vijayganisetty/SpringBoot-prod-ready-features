@@ -6,6 +6,8 @@ import com.practice.springboot.prod_ready_features.prod_ready_features.entities.
 import com.practice.springboot.prod_ready_features.prod_ready_features.repositories.PostRepo;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,13 +19,17 @@ public class PostServiceImpl implements PostService{
 
     private final PostRepo postRepo;
     private final ModelMapper mapper;
+    Logger log = LoggerFactory.getLogger(PostServiceImpl.class);
 
     @Override
     public List<PostDTO> getAllPosts() {
-        return postRepo.findAll().
+        log.info("Getting all posts");
+        List<PostDTO> postDTOList =  postRepo.findAll().
                 stream()
                 .map( postEntity -> mapper.map(postEntity, PostDTO.class))
                 .collect(Collectors.toList());
+        log.info("total posts {}", postDTOList.size());
+        return postDTOList;
     }
 
     @Override

@@ -2,17 +2,18 @@ package com.practice.springboot.prod_ready_features.prod_ready_features.clients;
 
 import com.practice.springboot.prod_ready_features.prod_ready_features.DTO.EmployeeDTO;
 import com.practice.springboot.prod_ready_features.prod_ready_features.advice.ResourceNotFoundException;
-import jakarta.annotation.PostConstruct;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
-import java.util.Arrays;
+import org.slf4j.Logger;
 
 @Service
 public class EmployeeClientImpl implements EmployeeClient {
 
 
+    Logger log = LoggerFactory.getLogger(EmployeeClientImpl.class);
     private final RestClient restClient;
 
 //    @PostConstruct
@@ -33,12 +34,13 @@ public class EmployeeClientImpl implements EmployeeClient {
 
     public EmployeeDTO getEmployeeById(Long id) {
         try {
+            log.info("Trying to retrieve employee by id {}", id);
             EmployeeDTO emp = restClient.get()
                     .uri("/employees/{id}", id)
                     .retrieve()
                     .onStatus(HttpStatusCode::is4xxClientError, (req, res) ->
                     {
-                        System.out.println("------------"+Arrays.toString(res.getBody().readAllBytes()));
+                        log.error(new String(res.getBody().readAllBytes()));
                         throw  new ResourceNotFoundException("could not found exception by id +"+id);
                     })
                     .onStatus(HttpStatusCode::is2xxSuccessful, (req, res) ->
